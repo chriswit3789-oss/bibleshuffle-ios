@@ -7,7 +7,7 @@
 	<string>app-store-connect</string>
 	<!-- Replace with YOUR Team ID (App Store Connect > Users and Access > Team ID) -->
 	<key>teamID</key>
-	<string>YOUR_TEAM_ID</string>
+	<string>DT5APY9N4H</string>
 	<key>uploadSymbols</key>
 	<true/>
 </dict>
