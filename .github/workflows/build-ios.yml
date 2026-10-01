@@ -20,8 +20,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Add iOS platform (skips if it already exists)
-        run: npx cap add ios || true
+      - name: Add iOS platform
+        run: npx cap add ios
 
       - name: Sync web app into native shell
         run: npx cap sync ios
@@ -60,9 +60,7 @@ jobs:
           path: build/ipa/*.ipa
 
       - name: Upload to TestFlight
-        uses: apple-actions/upload-testflight-build@v3
-        with:
-          app-path: build/ipa/*.ipa
-          issuer-id: ${{ secrets.ASC_ISSUER_ID }}
-          key-id: ${{ secrets.ASC_KEY_ID }}
-          api-key-content-base64: ${{ secrets.ASC_KEY_CONTENT }}
+        run: |
+          xcrun altool --upload-app -f build/ipa/*.ipa \
+            -apiKey ${{ secrets.ASC_KEY_ID }} \
+            -apiIssuer ${{ secrets.ASC_ISSUER_ID }}
