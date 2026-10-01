@@ -30,7 +30,12 @@ jobs:
         run: |
           mkdir -p ~/private_keys
           echo "${{ secrets.ASC_KEY_CONTENT }}" | base64 --decode > ~/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8
-
+ - name: Debug key file
+        run: |
+          ls -la ~/private_keys/
+          wc -c ~/private_keys/*.p8
+          head -c 32 ~/private_keys/*.p8; echo
+          tail -c 32 ~/private_keys/*.p8; echo
       - name: Archive app
         run: |
           xcodebuild -workspace ios/App/App.xcworkspace \
