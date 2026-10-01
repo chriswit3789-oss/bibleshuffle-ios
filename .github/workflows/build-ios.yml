@@ -27,15 +27,22 @@ jobs:
         run: npx cap sync ios
 
       - name: Decode App Store Connect API key
+        env:
+          ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
         run: |
           mkdir -p ~/private_keys
-          echo "${{ secrets.ASC_KEY_CONTENT }}" | base64 --decode > ~/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8
- - name: Debug key file
+          echo "key content length: ${#ASC_KEY_CONTENT}"
+          echo "key content starts with: ${ASC_KEY_CONTENT:0:12}"
+          echo "$ASC_KEY_CONTENT" | base64 --decode > ~/private_keys/AuthKey_$ASC_KEY_ID.p8
+
+      - name: Debug key file
         run: |
           ls -la ~/private_keys/
           wc -c ~/private_keys/*.p8
           head -c 32 ~/private_keys/*.p8; echo
           tail -c 32 ~/private_keys/*.p8; echo
+
       - name: Archive app
         run: |
           xcodebuild -workspace ios/App/App.xcworkspace \
