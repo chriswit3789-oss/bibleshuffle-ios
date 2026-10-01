@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: '[com.bibleshuffle.app](https://com.bibleshuffle.app)',
+  appId: 'com.bibleshuffle.app',
   appName: 'BibleShuffle',
   webDir: 'www',
   server: {
