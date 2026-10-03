@@ -96,5 +96,5 @@ jobs:
         run: |
           xcrun altool --upload-app -f build/ipa/*.ipa \
             -t ios \
-            -apiKey ${{ secrets.ASC_KEY_ID }} \
-            -apiIssuer ${{ secrets.ASC_ISSUER_ID }}
+            --api-key ${{ secrets.ASC_KEY_ID }} \
+            --api-issuer ${{ secrets.ASC_ISSUER_ID }}
