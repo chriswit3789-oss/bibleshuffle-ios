@@ -7,10 +7,19 @@ on:
 
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Select newest Xcode (need iOS 26 SDK for App Store)
+        run: |
+          ls /Applications/ | grep -i xcode
+          XCODE_PATH=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          echo "Using Xcode at: $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH"
+          xcodebuild -version
+          xcodebuild -showsdks | grep iphoneos || true
 
       - name: Setup Node
         uses: actions/setup-node@v4
