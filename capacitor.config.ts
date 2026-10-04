@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'BibleShuffle',
   webDir: 'www',
   server: {
-    url: 'https://yourbibleshuffle.base44.app',
+    url: 'https://yourbibleshuffle.base44.app/?v=2',
     cleartext: false,
   },
 };
