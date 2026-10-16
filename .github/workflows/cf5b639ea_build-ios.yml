@@ -18,7 +18,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Add iOS platform (skips if it already exists)
         run: npx cap add ios || true
@@ -93,3 +93,4 @@ jobs:
           issuer-id: ${{ secrets.ASC_ISSUER_ID }}
           key-id: ${{ secrets.ASC_KEY_ID }}
           api-key-content-base64: ${{ secrets.ASC_KEY_CONTENT }}
+
