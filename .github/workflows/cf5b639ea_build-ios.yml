@@ -53,6 +53,19 @@ jobs:
           fi
           echo "Key file first line: $(head -1 "$KEYFILE")"
 
+      - name: Inject camera and photo library usage descriptions
+        run: |
+          PLIST=ios/App/App/Info.plist
+          set_desc () {
+            /usr/libexec/PlistBuddy -c "Delete :$1" "$PLIST" 2>/dev/null || true
+            /usr/libexec/PlistBuddy -c "Add :$1 string $2" "$PLIST"
+          }
+          set_desc NSCameraUsageDescription "'My Bible Shuffle uses the camera so you can take a photo and set it as the background of your verse cards.'"
+          set_desc NSPhotoLibraryUsageDescription "'My Bible Shuffle needs access to your photos so you can choose an image as the background of your verse cards.'"
+          set_desc NSPhotoLibraryAddUsageDescription "'My Bible Shuffle saves verse card images you create to your photo library.'"
+          echo "--- injected privacy keys ---"
+          /usr/libexec/PlistBuddy -c "Print" "$PLIST" | grep -E "NSCameraUsageDescription|NSPhotoLibraryUsageDescription|NSPhotoLibraryAddUsageDescription" || (echo "ERROR: privacy keys NOT injected" && exit 1)
+
       - name: Replace placeholder app icon with final app icon
         run: |
           python3 - <<'PYI'
@@ -96,6 +109,7 @@ jobs:
             -destination 'generic/platform=iOS' \
             -archivePath build/App.xcarchive \
             -allowProvisioningUpdates \
+            IPHONEOS_DEPLOYMENT_TARGET=15.0 \
             CODE_SIGN_STYLE=Automatic \
             DEVELOPMENT_TEAM="$TEAM_ID" \
             CODE_SIGN_IDENTITY=- \
