@@ -93,6 +93,18 @@ jobs:
           print(f"Replaced {replaced} icon files in {d}")
           PYI
 
+      - name: Set build number from run number
+        run: |
+          cd ios/App
+          CURRENT=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" App/Info.plist 2>/dev/null || echo unknown)
+          echo "Plist build before: $CURRENT"
+          agvtool new-version -all ${GITHUB_RUN_NUMBER} || true
+          # agvtool + plist in step, belt and braces
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${GITHUB_RUN_NUMBER}" App/Info.plist 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string ${GITHUB_RUN_NUMBER}" App/Info.plist
+          grep -A1 -E "CFBundleVersion" App/Info.plist | head -4
+          echo "Uploading as build ${GITHUB_RUN_NUMBER}"
+
       - name: Archive app (ad-hoc signing, re-signed at export)
         env:
           ASC_TEAM_ID: ${{ secrets.ASC_TEAM_ID }}
